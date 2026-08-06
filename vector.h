@@ -21,6 +21,8 @@ public:
     bool operator==(const vector& other) const;
     bool operator!=(const vector& other) const;
 
+    explicit operator bool() const;
+
 private:
     int size;
     int* dynamicArray;

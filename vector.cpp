@@ -113,3 +113,7 @@ bool vector::operator==(const vector& other) const {
 bool vector::operator!=(const vector& other) const {
     return !(*this == other);
 }
+
+vector::operator bool() const {
+    return size > 0;
+}
