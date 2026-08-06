@@ -67,16 +67,17 @@ void vector::resize(int newSize) {
 }
 
 void vector::set(int index, int newValue) {
-    if (index >= 0 && index < size) {
-        dynamicArray[index] = newValue;
+    if (index < 0 || index >= size) {
+        throw std::out_of_range("Індекс поза межами масиву!");
     }
+    dynamicArray[index] = newValue;
 }
 
 int vector::get(int index) const {
-    if (index >= 0 && index < size) {
-        return dynamicArray[index];
+    if (index < 0 || index >= size) {
+        throw std::out_of_range("Індекс поза межами масиву!");
     }
-    return -1;
+    return dynamicArray[index];
 }
 
 int vector::getSize() const {
@@ -84,10 +85,16 @@ int vector::getSize() const {
 }
 
 int& vector::operator[](int index) {
+    if (index < 0 || index >= size) {
+        throw std::out_of_range("Індекс поза межами масиву!");
+    }
     return dynamicArray[index];
 }
 
 const int& vector::operator[](int index) const {
+    if (index < 0 || index >= size) {
+        throw std::out_of_range("Індекс поза межами масиву!");
+    }
     return dynamicArray[index];
 }
 
