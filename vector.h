@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdexcept>
+
 class vector {
 public:
     vector(int sizeOffArray);

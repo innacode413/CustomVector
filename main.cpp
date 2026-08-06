@@ -51,5 +51,25 @@ int main() {
     vector d(2);
     std::cout << "a == d (different size): " << (a == d) << "\n";
 
+    std::cout << "\n=== Тестування виключень ===\n\n";
+
+    try {
+        a[10];
+    } catch (const std::out_of_range& ex) {
+        std::cout << "operator[] некоректний індекс: " << ex.what() << "\n";
+    }
+
+    try {
+        a.get(-1);
+    } catch (const std::out_of_range& ex) {
+        std::cout << "get() некоректний індекс: " << ex.what() << "\n";
+    }
+
+    try {
+        a.set(100, 42);
+    } catch (const std::out_of_range& ex) {
+        std::cout << "set() некоректний індекс: " << ex.what() << "\n";
+    }
+
     return 0;
 }
