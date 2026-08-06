@@ -71,5 +71,17 @@ int main() {
         std::cout << "set() некоректний індекс: " << ex.what() << "\n";
     }
 
+    std::cout << "\n=== Тестування operator bool ===\n\n";
+
+    vector empty(0);
+    std::cout << "a (size 3) -> " << (a ? "не порожній" : "порожній") << "\n";
+    std::cout << "empty (size 0) -> " << (empty ? "не порожній" : "порожній") << "\n";
+    if (a) {
+        std::cout << "if (a) спрацювало\n";
+    }
+    if (!empty) {
+        std::cout << "if (!empty) спрацювало\n";
+    }
+
     return 0;
 }
