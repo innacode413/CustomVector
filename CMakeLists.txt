@@ -8,4 +8,5 @@ add_executable(CustomVector
     main.cpp
     vector.cpp
     vector.h
+    static_array.h
 )
