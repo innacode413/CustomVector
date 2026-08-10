@@ -1,11 +1,12 @@
 #include <iostream>
 #include "vector.h"
+#include "static_array.h"
 
 int main() {
-    std::cout << "=== Тестування класу vector ===\n\n";
+    std::cout << "=== Тестування шаблонного Vector<int> ===\n\n";
 
-    vector v(5);
-    std::cout << "Initial size: " << v.getSize() << "\n\n";
+    Vector<int> v(5);
+    std::cout << "Initial size: " << v.getSize() << "\n";
 
     v.set(0, 10);
     v.set(4, 40);
@@ -15,72 +16,58 @@ int main() {
 
     std::cout << "--- Resizing to 10 ---\n";
     v.resize(10);
-    std::cout << "New size after resize: " << v.getSize() << "\n\n";
-
+    std::cout << "New size after resize: " << v.getSize() << "\n";
     v.set(5, 50);
     std::cout << "Element at index 5: " << v.get(5) << "\n\n";
 
-    std::cout << "--- Resizing to 3 ---\n";
-    v.resize(3);
-    std::cout << "New size after resize: " << v.getSize() << "\n\n";
+    Vector<int> copy(v);
+    std::cout << "copy[0] via copy ctor: " << copy[0] << "\n";
+    std::cout << "v == copy: " << (v == copy) << "\n";
 
-    std::cout << "Final element at index 0: " << v.get(0) << "\n";
-    std::cout << "Final element at index 2: " << v.get(2) << "\n\n";
+    Vector<int> empty;
+    std::cout << "empty -> " << (empty ? "не порожній" : "порожній") << "\n";
+    std::cout << "v -> " << (v ? "не порожній" : "порожній") << "\n";
 
-    std::cout << "=== Тестування копіювання та операторів ===\n\n";
+    std::cout << "\n=== Тестування шаблонного Vector<double> ===\n\n";
 
-    vector a(3);
-    a[0] = 1;
-    a[1] = 2;
-    a[2] = 3;
-
-    vector b(a);
-    std::cout << "b created via copy ctor, b[1] = " << b[1] << "\n";
-
-    vector c(3);
-    c = a;
-    std::cout << "c assigned via operator=, c[2] = " << c[2] << "\n";
-
-    std::cout << "a == b: " << (a == b) << "\n";
-    std::cout << "a != c: " << (a != c) << "\n";
-
-    b[1] = 99;
-    std::cout << "after b[1] = 99 -> a == b: " << (a == b) << "\n";
-    std::cout << "after b[1] = 99 -> a != b: " << (a != b) << "\n";
-
-    vector d(2);
-    std::cout << "a == d (different size): " << (a == d) << "\n";
-
-    std::cout << "\n=== Тестування виключень ===\n\n";
+    Vector<double> d(3);
+    d[0] = 1.5;
+    d[1] = 2.25;
+    d[2] = 3.75;
+    std::cout << "d[0] = " << d[0] << ", d[1] = " << d[1] << ", d[2] = " << d[2] << "\n";
 
     try {
-        a[10];
+        d[10];
     } catch (const std::out_of_range& ex) {
         std::cout << "operator[] некоректний індекс: " << ex.what() << "\n";
     }
 
-    try {
-        a.get(-1);
-    } catch (const std::out_of_range& ex) {
-        std::cout << "get() некоректний індекс: " << ex.what() << "\n";
-    }
+    std::cout << "\n=== Тестування StaticArray<int, 5> ===\n\n";
+
+    StaticArray<int, 5> arr;
+    arr.set(0, 100);
+    arr.set(4, 500);
+    std::cout << "arr[0] = " << arr[0] << ", arr[4] = " << arr.get(4) << "\n";
+    std::cout << "arr size: " << arr.getSize() << "\n";
+
+    StaticArray<int, 5> arr2;
+    arr2[0] = 100;
+    arr2[4] = 500;
+    std::cout << "arr == arr2: " << (arr == arr2) << "\n";
+
+    arr[0] = 1;
+    std::cout << "after arr[0] = 1 -> arr != arr2: " << (arr != arr2) << "\n";
+
+    StaticArray<double, 3> arrD;
+    arrD[0] = 1.1;
+    arrD[1] = 2.2;
+    arrD[2] = 3.3;
+    std::cout << "StaticArray<double,3>: " << arrD[0] << ", " << arrD[1] << ", " << arrD[2] << "\n";
 
     try {
-        a.set(100, 42);
+        arr[10];
     } catch (const std::out_of_range& ex) {
-        std::cout << "set() некоректний індекс: " << ex.what() << "\n";
-    }
-
-    std::cout << "\n=== Тестування operator bool ===\n\n";
-
-    vector empty(0);
-    std::cout << "a (size 3) -> " << (a ? "не порожній" : "порожній") << "\n";
-    std::cout << "empty (size 0) -> " << (empty ? "не порожній" : "порожній") << "\n";
-    if (a) {
-        std::cout << "if (a) спрацювало\n";
-    }
-    if (!empty) {
-        std::cout << "if (!empty) спрацювало\n";
+        std::cout << "StaticArray operator[] некоректний індекс: " << ex.what() << "\n";
     }
 
     return 0;

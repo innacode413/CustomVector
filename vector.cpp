@@ -1,19 +1,27 @@
 #include "vector.h"
 
-vector::vector(int sizeOffArray) {
+template <typename T>
+Vector<T>::Vector() {
+    size = 0;
+    dynamicArray = nullptr;
+}
+
+template <typename T>
+Vector<T>::Vector(int sizeOffArray) {
     if (sizeOffArray <= 0) {
         size = 0;
         dynamicArray = nullptr;
     } else {
         size = sizeOffArray;
-        dynamicArray = new int[size]{};
+        dynamicArray = new T[size]{};
     }
 }
 
-vector::vector(const vector& other) {
+template <typename T>
+Vector<T>::Vector(const Vector& other) {
     size = other.size;
     if (size > 0) {
-        dynamicArray = new int[size];
+        dynamicArray = new T[size];
         for (int i = 0; i < size; ++i) {
             dynamicArray[i] = other.dynamicArray[i];
         }
@@ -22,11 +30,13 @@ vector::vector(const vector& other) {
     }
 }
 
-vector::~vector() {
+template <typename T>
+Vector<T>::~Vector() {
     delete[] dynamicArray;
 }
 
-vector& vector::operator=(const vector& other) {
+template <typename T>
+Vector<T>& Vector<T>::operator=(const Vector& other) {
     if (this == &other) {
         return *this;
     }
@@ -35,7 +45,7 @@ vector& vector::operator=(const vector& other) {
 
     size = other.size;
     if (size > 0) {
-        dynamicArray = new int[size];
+        dynamicArray = new T[size];
         for (int i = 0; i < size; ++i) {
             dynamicArray[i] = other.dynamicArray[i];
         }
@@ -46,7 +56,8 @@ vector& vector::operator=(const vector& other) {
     return *this;
 }
 
-void vector::resize(int newSize) {
+template <typename T>
+void Vector<T>::resize(int newSize) {
     if (newSize <= 0) {
         size = 0;
         delete[] dynamicArray;
@@ -54,7 +65,7 @@ void vector::resize(int newSize) {
         return;
     }
 
-    int* tempArray = new int[newSize]{};
+    T* tempArray = new T[newSize]{};
 
     int elementsToCopy = (newSize < size) ? newSize : size;
     for (int i = 0; i < elementsToCopy; ++i) {
@@ -66,39 +77,45 @@ void vector::resize(int newSize) {
     size = newSize;
 }
 
-void vector::set(int index, int newValue) {
+template <typename T>
+void Vector<T>::set(int index, const T& newValue) {
     if (index < 0 || index >= size) {
         throw std::out_of_range("Індекс поза межами масиву!");
     }
     dynamicArray[index] = newValue;
 }
 
-int vector::get(int index) const {
+template <typename T>
+T Vector<T>::get(int index) const {
     if (index < 0 || index >= size) {
         throw std::out_of_range("Індекс поза межами масиву!");
     }
     return dynamicArray[index];
 }
 
-int vector::getSize() const {
+template <typename T>
+int Vector<T>::getSize() const {
     return size;
 }
 
-int& vector::operator[](int index) {
+template <typename T>
+T& Vector<T>::operator[](int index) {
     if (index < 0 || index >= size) {
         throw std::out_of_range("Індекс поза межами масиву!");
     }
     return dynamicArray[index];
 }
 
-const int& vector::operator[](int index) const {
+template <typename T>
+const T& Vector<T>::operator[](int index) const {
     if (index < 0 || index >= size) {
         throw std::out_of_range("Індекс поза межами масиву!");
     }
     return dynamicArray[index];
 }
 
-bool vector::operator==(const vector& other) const {
+template <typename T>
+bool Vector<T>::operator==(const Vector& other) const {
     if (size != other.size) {
         return false;
     }
@@ -110,10 +127,15 @@ bool vector::operator==(const vector& other) const {
     return true;
 }
 
-bool vector::operator!=(const vector& other) const {
+template <typename T>
+bool Vector<T>::operator!=(const Vector& other) const {
     return !(*this == other);
 }
 
-vector::operator bool() const {
+template <typename T>
+Vector<T>::operator bool() const {
     return size > 0;
 }
+
+template class Vector<int>;
+template class Vector<double>;
