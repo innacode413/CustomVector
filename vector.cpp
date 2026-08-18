@@ -3,6 +3,7 @@
 template <typename T>
 Vector<T>::Vector() {
     size = 0;
+    capacity = 0;
     dynamicArray = nullptr;
 }
 
@@ -10,18 +11,21 @@ template <typename T>
 Vector<T>::Vector(int sizeOffArray) {
     if (sizeOffArray <= 0) {
         size = 0;
+        capacity = 0;
         dynamicArray = nullptr;
     } else {
         size = sizeOffArray;
-        dynamicArray = new T[size]{};
+        capacity = static_cast<std::size_t>(sizeOffArray);
+        dynamicArray = new T[capacity]{};
     }
 }
 
 template <typename T>
 Vector<T>::Vector(const Vector& other) {
     size = other.size;
-    if (size > 0) {
-        dynamicArray = new T[size];
+    capacity = other.capacity;
+    if (capacity > 0) {
+        dynamicArray = new T[capacity];
         for (int i = 0; i < size; ++i) {
             dynamicArray[i] = other.dynamicArray[i];
         }
@@ -44,8 +48,9 @@ Vector<T>& Vector<T>::operator=(const Vector& other) {
     delete[] dynamicArray;
 
     size = other.size;
-    if (size > 0) {
-        dynamicArray = new T[size];
+    capacity = other.capacity;
+    if (capacity > 0) {
+        dynamicArray = new T[capacity];
         for (int i = 0; i < size; ++i) {
             dynamicArray[i] = other.dynamicArray[i];
         }
@@ -62,19 +67,69 @@ void Vector<T>::resize(int newSize) {
         size = 0;
         delete[] dynamicArray;
         dynamicArray = nullptr;
+        capacity = 0;
         return;
     }
 
-    T* tempArray = new T[newSize]{};
+    if (static_cast<std::size_t>(newSize) > capacity) {
+        std::size_t newCapacity = (capacity == 0) ? 1 : capacity * 2;
+        if (newCapacity < static_cast<std::size_t>(newSize)) {
+            newCapacity = static_cast<std::size_t>(newSize);
+        }
 
-    int elementsToCopy = (newSize < size) ? newSize : size;
-    for (int i = 0; i < elementsToCopy; ++i) {
-        tempArray[i] = dynamicArray[i];
+        T* newData = new T[newCapacity];
+
+        for (int i = 0; i < size; ++i) {
+            newData[i] = dynamicArray[i];
+        }
+
+        delete[] dynamicArray;
+        dynamicArray = newData;
+        capacity = newCapacity;
+    }
+
+    size = newSize;
+}
+
+template <typename T>
+void Vector<T>::grow() {
+    std::size_t newCapacity = (capacity == 0) ? 1 : capacity * 2;
+    T* newData = new T[newCapacity];
+
+    for (int i = 0; i < size; ++i) {
+        newData[i] = dynamicArray[i];
     }
 
     delete[] dynamicArray;
-    dynamicArray = tempArray;
-    size = newSize;
+    dynamicArray = newData;
+    capacity = newCapacity;
+}
+
+template <typename T>
+void Vector<T>::push_back(const T& value) {
+    if (static_cast<std::size_t>(size) == capacity) {
+        grow();
+    }
+
+    dynamicArray[size] = value;
+    ++size;
+}
+
+template <typename T>
+void Vector<T>::reserve(std::size_t newCapacity) {
+    if (newCapacity <= capacity) {
+        return;
+    }
+
+    T* newData = new T[newCapacity];
+
+    for (int i = 0; i < size; ++i) {
+        newData[i] = dynamicArray[i];
+    }
+
+    delete[] dynamicArray;
+    dynamicArray = newData;
+    capacity = newCapacity;
 }
 
 template <typename T>
@@ -96,6 +151,11 @@ T Vector<T>::get(int index) const {
 template <typename T>
 int Vector<T>::getSize() const {
     return size;
+}
+
+template <typename T>
+std::size_t Vector<T>::getCapacity() const {
+    return capacity;
 }
 
 template <typename T>
