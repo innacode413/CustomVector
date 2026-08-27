@@ -2,6 +2,7 @@
 #include <sstream>
 #include "vector.h"
 #include "static_array.h"
+#include "sort.h"
 
 int main() {
     std::cout << "=== Тестування capacity-логіки ===\n\n";
@@ -10,16 +11,14 @@ int main() {
     std::cout << "empty: size=" << v.getSize() << ", capacity=" << v.getCapacity() << "\n";
 
     for (int i = 0; i < 10; ++i) {
-        v.push_back(i * 10);
-        std::cout << "push_back(" << i * 10 << "): size=" << v.getSize()
+        v.push_back((9 - i) * 10);
+        std::cout << "push_back(" << (9 - i) * 10 << "): size=" << v.getSize()
                   << ", capacity=" << v.getCapacity() << "\n";
     }
 
-    std::cout << "\nelements: ";
-    for (int i = 0; i < v.getSize(); ++i) {
-        std::cout << v[i] << " ";
-    }
-    std::cout << "\n";
+    std::cout << "\nelements before sort: " << v << "\n";
+    insertion_sort(v);
+    std::cout << "elements after sort:  " << v << "\n";
 
     std::cout << "\n--- reserve ---\n";
     v.reserve(50);
@@ -34,11 +33,13 @@ int main() {
     std::cout << "\n=== Тестування операторів << і >> ===\n\n";
 
     Vector<int> a(3);
-    a[0] = 1;
-    a[1] = 2;
-    a[2] = 3;
+    a[0] = 3;
+    a[1] = 1;
+    a[2] = 2;
 
     std::cout << "operator<<: " << a << "\n";
+    insertion_sort(a);
+    std::cout << "sorted:      " << a << "\n";
 
     std::stringstream ss("42 43 44");
     Vector<int> b;
@@ -46,11 +47,18 @@ int main() {
     ss >> b;
     ss >> b;
     std::cout << "operator>> (з stringstream): " << b << "\n";
+    insertion_sort(b);
+    std::cout << "sorted:                       " << b << "\n";
+
+    std::cout << "\n=== Тестування шаблонного Vector<double> ===\n\n";
 
     Vector<double> d;
-    d.push_back(1.5);
-    d.push_back(2.25);
-    std::cout << "Vector<double>: " << d << "\n";
+    d.push_back(3.3);
+    d.push_back(1.1);
+    d.push_back(2.2);
+    std::cout << "Vector<double> before sort: " << d << "\n";
+    insertion_sort(d);
+    std::cout << "Vector<double> after sort:  " << d << "\n";
 
     return 0;
 }

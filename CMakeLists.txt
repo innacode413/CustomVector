@@ -9,4 +9,5 @@ add_executable(CustomVector
     vector.cpp
     vector.h
     static_array.h
+    sort.h
 )
