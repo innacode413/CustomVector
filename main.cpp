@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 #include "vector.h"
 #include "static_array.h"
 #include "sort.h"
@@ -20,15 +21,42 @@ int main() {
     insertion_sort(v);
     std::cout << "elements after sort:  " << v << "\n";
 
-    std::cout << "\n--- reserve ---\n";
-    v.reserve(50);
-    std::cout << "after reserve(50): size=" << v.getSize()
-              << ", capacity=" << v.getCapacity() << "\n";
+    std::cout << "\n=== Тестування ітераторів ===\n\n";
 
-    std::cout << "\n--- resize(5) ---\n";
-    v.resize(5);
-    std::cout << "after resize(5): size=" << v.getSize()
-              << ", capacity=" << v.getCapacity() << "\n";
+    std::cout << "Обхід через begin()/end(): ";
+    for (Vector<int>::Iterator it = v.begin(); it != v.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << "\n";
+
+    std::cout << "Range-for (використовує begin/end): ";
+    for (int value : v) {
+        std::cout << value << " ";
+    }
+    std::cout << "\n";
+
+    std::cout << "Ітератори random access:\n";
+    Vector<int>::Iterator first = v.begin();
+    std::cout << "  *begin = " << *first << "\n";
+    std::cout << "  begin[2] = " << first[2] << "\n";
+    std::cout << "  *(begin + 3) = " << *(first + 3) << "\n";
+    std::cout << "  end - begin = " << (v.end() - v.begin()) << "\n";
+    std::cout << "  begin < begin+2: " << (first < first + 2) << "\n";
+
+    std::cout << "std::sort через ітератори: ";
+    Vector<int> s(3);
+    s[0] = 5;
+    s[1] = 1;
+    s[2] = 4;
+    std::sort(s.begin(), s.end());
+    std::cout << s << "\n";
+
+    std::cout << "const ітератори: ";
+    const Vector<int>& cref = v;
+    for (Vector<int>::Iterator it = cref.begin(); it != cref.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << "\n";
 
     std::cout << "\n=== Тестування операторів << і >> ===\n\n";
 
@@ -38,8 +66,6 @@ int main() {
     a[2] = 2;
 
     std::cout << "operator<<: " << a << "\n";
-    insertion_sort(a);
-    std::cout << "sorted:      " << a << "\n";
 
     std::stringstream ss("42 43 44");
     Vector<int> b;
@@ -47,18 +73,6 @@ int main() {
     ss >> b;
     ss >> b;
     std::cout << "operator>> (з stringstream): " << b << "\n";
-    insertion_sort(b);
-    std::cout << "sorted:                       " << b << "\n";
-
-    std::cout << "\n=== Тестування шаблонного Vector<double> ===\n\n";
-
-    Vector<double> d;
-    d.push_back(3.3);
-    d.push_back(1.1);
-    d.push_back(2.2);
-    std::cout << "Vector<double> before sort: " << d << "\n";
-    insertion_sort(d);
-    std::cout << "Vector<double> after sort:  " << d << "\n";
 
     return 0;
 }
