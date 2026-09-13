@@ -197,5 +197,25 @@ Vector<T>::operator bool() const {
     return size > 0;
 }
 
+template <typename T>
+typename Vector<T>::Iterator Vector<T>::begin() {
+    return Iterator(dynamicArray);
+}
+
+template <typename T>
+typename Vector<T>::Iterator Vector<T>::end() {
+    return Iterator(dynamicArray + size);
+}
+
+template <typename T>
+const typename Vector<T>::Iterator Vector<T>::begin() const {
+    return Iterator(dynamicArray);
+}
+
+template <typename T>
+const typename Vector<T>::Iterator Vector<T>::end() const {
+    return Iterator(dynamicArray + size);
+}
+
 template class Vector<int>;
 template class Vector<double>;
